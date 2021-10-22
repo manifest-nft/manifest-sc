@@ -20,10 +20,11 @@ contract Manifest is Ownable {
 
     address payable multisigAddress;
 
-    constructor(address payable multisig) {
-        multisigAddress = multisig;
+    constructor() {
+        // multisigAddress = multisig;
     }
 
+    // parameters: NFTContract - contract of the NFT to manifest, source: Moralis NFT API (user.getUserNFTS)
     function submitManifest(address NFTContract) public payable {
         require(
             hasRedeemed[msg.sender][NFTContract] == false,
