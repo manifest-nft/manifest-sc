@@ -39,11 +39,13 @@ contract Manifest is Ownable {
         emit manifestSubmitted(msg.sender, NFTContract);
     }
 
-    function _manifest(address NFTContractAddress) public onlyOwner {
-        for (uint256 i = 0; i < ManifestList.length; i++) {}
-        hasRedeemed[msg.sender][NFTContractAddress] = true;
-        // backend listens for this event to send request to scalablePressQuote
-        emit manifestNFT(msg.sender, NFTContractAddress);
+    function _manifest() public onlyOwner {
+        for (uint256 i = 0; i < ManifestList.length; i++) {
+            address sender = ManifestList[i].sender;
+            address NFTContract = ManifestList[i].NFTContract;
+            hasRedeemed[sender][NFTContract] = true;
+            emit manifestNFT(sender, NFTContract);
+        }
     }
 
     // function that can be called by the deployer to send funds to multisig
