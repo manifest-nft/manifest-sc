@@ -17,7 +17,6 @@ contract ManifestNFT is ERC721URIStorage, ERC721Burnable, Ownable {
 
     function mintItem(address to, string memory _tokenURI)
         public
-        onlyOwner
         returns (uint256)
     {
         _tokenIds.increment();
@@ -27,6 +26,10 @@ contract ManifestNFT is ERC721URIStorage, ERC721Burnable, Ownable {
         _setTokenURI(id, _tokenURI);
 
         return id;
+    }
+
+    function getCounter() public view returns (uint256) {
+        return Counters.current(_tokenIds);
     }
 
     // function tokenURI(uint256 tokenId)

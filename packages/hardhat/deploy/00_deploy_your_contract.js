@@ -6,16 +6,17 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
 
-  const nftFactory = await ethers.getContractFactory("ManifestNFT");
+  const nft = await deploy("ManifestNFT", {
+    from: deployer,
+    log: true,
+  });
 
-  const nft = await nftFactory.deploy();
+  console.log(nft.address);
 
-  const manifestFactory = await ethers.getContractFactory("Manifest");
-
-  const manifest = manifestFactory.deploy(
-    "0x3AE006c5C6F7e540b13200124691c34329e95219",
-    nft.address
-  );
+  await deploy("Manifest", {
+    from: deployer,
+    args: ["0x3AE006c5C6F7e540b13200124691c34329e95219", nft.address],
+  });
 
   /*
     // Getting a previously deployed contract

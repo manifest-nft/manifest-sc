@@ -8,13 +8,19 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "./ManifestNFT.sol";
 
 contract Manifest is Ownable {
-    event manifestNFT(address sender, uint256 tokenId);
+    event manifestNFT(
+        address sender,
+        address NFTContract,
+        uint256 tokenId,
+        uint256 lastManifestId
+    );
     event mintedManifestNFT(address minter, string tokenURI);
     event burnedManifestNFT(address burner, uint256 tokenId);
 
     address payable multisigAddress;
 
-    mapping(address => mapping(address => bool)) public hasRedeemed;
+    mapping(address => mapping(address => mapping(uint256 => bool)))
+        public hasRedeemed;
 
     ManifestNFT collection;
 
@@ -35,13 +41,14 @@ contract Manifest is Ownable {
             "You're not the owner of this NFT"
         );
         require(
-            hasRedeemed[msg.sender][NFTContract] == false,
+            hasRedeemed[msg.sender][NFTContract][_tokenId] == false,
             "NFT has already been manifested."
         );
-        hasRedeemed[msg.sender][NFTContract] = true;
+        hasRedeemed[msg.sender][NFTContract][_tokenId] = true;
+        uint256 lastManifestId = collection.getCounter();
 
         _mint721(msg.sender, _tokenURI);
-        emit manifestNFT(msg.sender, _tokenId);
+        emit manifestNFT(msg.sender, NFTContract, _tokenId, lastManifestId);
     }
 
     function _mint721(address _sender, string memory _tokenURI) internal {
@@ -50,8 +57,8 @@ contract Manifest is Ownable {
     }
 
     function manifest(uint256 _tokenId) public {
-        collection.burn(_tokenId);
         collection.approve(address(this), _tokenId);
+        collection.burn(_tokenId);
         emit burnedManifestNFT(msg.sender, _tokenId);
     }
 
