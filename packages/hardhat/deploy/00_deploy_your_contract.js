@@ -1,17 +1,25 @@
 // deploy/00_deploy_your_contract.js
 
-// const { ethers } = require("hardhat");
+const { ethers } = require("hardhat");
 
 module.exports = async ({ getNamedAccounts, deployments }) => {
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
-  await deploy("Manifest", {
+
+  const nftFactory = await ethers.getContractFactory("ManifestNFT");
+
+  const nft = await nftFactory.deploy();
+
+  const manifestFactory = await ethers.getContractFactory("Manifest");
+
+  const manifest = manifestFactory.deploy("Manifest", {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
-    args: [0x3ae006c5c6f7e540b13200124691c34329e95219],
+    args: ["0x3ae006c5c6f7e540b13200124691c34329e95219", nft.address],
     log: true,
   });
 
+  console.log(manifest);
   /*
     // Getting a previously deployed contract
     const YourContract = await ethers.getContract("YourContract", deployer);
