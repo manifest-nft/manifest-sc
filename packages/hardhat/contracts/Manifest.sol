@@ -8,49 +8,31 @@ import "@openzeppelin/contracts/access/Ownable.sol"; //https://github.com/OpenZe
 contract Manifest is Ownable {
     mapping(address => mapping(address => bool)) public hasRedeemed;
 
-    event manifestSubmitted(address sender, address NFTContractAddress);
     event manifestNFT(address sender, address NFTContractAddress);
-
-    struct ManifestSubmission {
-        address sender;
-        address NFTContract;
-    }
-
-    ManifestSubmission[] ManifestList;
 
     address payable multisigAddress;
 
-    constructor() {
-        // multisigAddress = multisig;
+    constructor(address payable multisig) {
+        multisigAddress = multisig;
     }
 
+    // only call from our UI, don't call the method from Polygonscan, you won't get merch nor a refund. Yours truly, the ManifestArt team.
     // parameters: NFTContract - contract of the NFT to manifest, source: Moralis NFT API (user.getUserNFTS)
     function submitManifest(address NFTContract) public payable {
         require(
             hasRedeemed[msg.sender][NFTContract] == false,
             "NFT has already been manifested."
         );
-        ManifestSubmission memory currManifest = ManifestSubmission(
-            msg.sender,
-            NFTContract
-        );
-        // submitManifest will be called with
-        ManifestList.push(currManifest);
 
-        emit manifestSubmitted(msg.sender, NFTContract);
-    }
-
-    function _manifest() public onlyOwner {
-        for (uint256 i = 0; i < ManifestList.length; i++) {
-            address sender = ManifestList[i].sender;
-            address NFTContract = ManifestList[i].NFTContract;
-            hasRedeemed[sender][NFTContract] = true;
-            emit manifestNFT(sender, NFTContract);
-        }
+        hasRedeemed[msg.sender][NFTContract] = true;
+        emit manifestNFT(msg.sender, NFTContract);
     }
 
     // function that can be called by the deployer to send funds to multisig
-    function _withdraw() public onlyOwner {
-        multisigAddress.transfer(address(this).balance);
+    function _withdraw() public {
+        (bool success, ) = multisigAddress.call{value: address(this).balance}(
+            ""
+        );
+        require(success, "Transfer failed.");
     }
 }
