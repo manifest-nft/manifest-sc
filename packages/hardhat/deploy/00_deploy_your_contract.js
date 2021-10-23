@@ -11,11 +11,9 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     log: true,
   });
 
-  console.log(nft.address);
-
   await deploy("Manifest", {
     from: deployer,
-    args: ["0x3AE006c5C6F7e540b13200124691c34329e95219", nft.address],
+    args: ["0x071701fb19D767a8776b344CF4270693A3Bf0d6B", nft.address],
   });
 
   /*
