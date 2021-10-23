@@ -49,7 +49,6 @@ contract Manifest is Ownable {
         emit mintedManifestNFT(_sender, _tokenURI);
     }
 
-    // TODO
     function manifest(uint256 _tokenId) public {
         collection.burn(_tokenId);
         collection.approve(address(this), _tokenId);

@@ -12,12 +12,10 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
 
   const manifestFactory = await ethers.getContractFactory("Manifest");
 
-  const manifest = manifestFactory.deploy("Manifest", {
-    // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
-    from: deployer,
-    args: ["0x3ae006c5c6f7e540b13200124691c34329e95219", nft.address],
-    log: true,
-  });
+  const manifest = manifestFactory.deploy(
+    "0x3AE006c5C6F7e540b13200124691c34329e95219",
+    nft.address
+  );
 
   /*
     // Getting a previously deployed contract
