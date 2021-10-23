@@ -8,11 +8,13 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "./ManifestNFT.sol";
 
 contract Manifest is Ownable {
-    mapping(address => mapping(address => bool)) public hasRedeemed;
-
-    event manifestNFT(address sender, address NFTContractAddress);
+    event manifestNFT(address sender, uint256 tokenId);
+    event mintedManifestNFT(address minter, string tokenURI);
+    event burnedManifestNFT(address burner, uint256 tokenId);
 
     address payable multisigAddress;
+
+    mapping(address => mapping(address => bool)) public hasRedeemed;
 
     ManifestNFT collection;
 
@@ -39,15 +41,20 @@ contract Manifest is Ownable {
         hasRedeemed[msg.sender][NFTContract] = true;
 
         _mint721(msg.sender, _tokenURI);
-        emit manifestNFT(msg.sender, NFTContract);
+        emit manifestNFT(msg.sender, _tokenId);
     }
 
     function _mint721(address _sender, string memory _tokenURI) internal {
         collection.mintItem(_sender, _tokenURI);
+        emit mintedManifestNFT(_sender, _tokenURI);
     }
 
     // TODO
-    function manifest(address NFTContractAddress) public {}
+    function manifest(uint256 _tokenId) public {
+        collection.burn(_tokenId);
+        collection.approve(address(this), _tokenId);
+        emit burnedManifestNFT(msg.sender, _tokenId);
+    }
 
     // function that can be called by the deployer to send funds to multisig
     function _withdraw() public {
