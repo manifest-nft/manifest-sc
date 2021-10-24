@@ -1,4 +1,12 @@
-# 🏗 Scaffold-ETH
+# 🏗 Scaffold-ETH (Manifest Art)
+
+## Useful Links
+
+Manifest Contract -> [Link](https://github.com/manifest-nft/scaffold-eth/blob/master/packages/hardhat/contracts/Manifest.sol)
+
+NFT Contract -> [Link](https://github.com/manifest-nft/scaffold-eth/blob/master/packages/hardhat/contracts/ManifestNFT.sol)
+
+Frontend -> [Link](https://github.com/manifest-nft/scaffold-eth/blob/master/packages/react-app/src/App.jsx)
 
 > everything you need to build on Ethereum! 🚀
 
