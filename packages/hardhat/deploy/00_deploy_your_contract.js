@@ -11,7 +11,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     log: true,
   });
 
-  await deploy("Manifest", {
+  const manifest = await deploy("Manifest", {
     from: deployer,
     args: ["0x071701fb19D767a8776b344CF4270693A3Bf0d6B", nft.address],
   });

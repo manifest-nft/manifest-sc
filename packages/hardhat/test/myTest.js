@@ -12,9 +12,9 @@ describe("My Dapp", function () {
     setTimeout(done, 2000);
   });
 
-  describe("YourContract", function () {
+  describe("Manifest", function () {
     it("Should deploy YourContract", async function () {
-      const YourContract = await ethers.getContractFactory("YourContract");
+      const YourContract = await ethers.getContractFactory("Manifest");
 
       myContract = await YourContract.deploy();
     });
