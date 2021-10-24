@@ -56,7 +56,7 @@ contract Manifest is Ownable, IERC721Receiver {
         string memory _tokenURI = string(
             abi.encodePacked(baseURI, collectionAddress, uintString)
         );
-
+        console.log(_tokenURI);
         _mint721(msg.sender, _tokenURI);
         emit manifestNFT(msg.sender, NFTContract, _tokenId, lastManifestId);
     }
@@ -92,6 +92,7 @@ contract Manifest is Ownable, IERC721Receiver {
         return this.onERC721Received.selector;
     }
 
+    // https://stackoverflow.com/questions/47129173/how-to-convert-uint-to-string-in-solidity
     function uint2str(uint256 _i)
         internal
         pure
