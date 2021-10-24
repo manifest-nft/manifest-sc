@@ -5,10 +5,11 @@ import "hardhat/console.sol";
 
 import "@openzeppelin/contracts/access/Ownable.sol"; //https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable.sol
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import "./ManifestNFT.sol";
 import "./utils/IntString.sol";
 
-contract Manifest is Ownable {
+contract Manifest is Ownable, IERC721Receiver {
     event manifestNFT(
         address sender,
         address NFTContract,
@@ -65,9 +66,12 @@ contract Manifest is Ownable {
         emit mintedManifestNFT(_sender, _tokenURI);
     }
 
+    // IERC721Burnable not burning
+    // burn = transfer to smart contract which doesn't have NFT withdraw functionality
     function manifest(uint256 _tokenId) public {
-        collection.burn(_tokenId);
-        collection.approve(address(this), _tokenId);
+        collection.setApprovalForAll(address(this), true);
+        collection.safeTransferFrom(msg.sender, address(this), _tokenId);
+
         emit burnedManifestNFT(msg.sender, _tokenId);
     }
 
@@ -77,6 +81,15 @@ contract Manifest is Ownable {
             ""
         );
         require(success, "Transfer failed.");
+    }
+
+    function onERC721Received(
+        address,
+        address,
+        uint256,
+        bytes memory
+    ) public virtual override returns (bytes4) {
+        return this.onERC721Received.selector;
     }
 
     function uint2str(uint256 _i)
