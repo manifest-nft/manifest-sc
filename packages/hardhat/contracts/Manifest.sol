@@ -7,7 +7,6 @@ import "@openzeppelin/contracts/access/Ownable.sol"; //https://github.com/OpenZe
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import "./ManifestNFT.sol";
-import "./utils/IntString.sol";
 
 contract Manifest is Ownable, IERC721Receiver {
     event manifestNFT(
