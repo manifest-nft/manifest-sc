@@ -45,10 +45,10 @@ contract Manifest is Ownable, IERC721Receiver {
             IERC721(NFTContract).ownerOf(_tokenId) == msg.sender,
             "You're not the owner of this NFT"
         );
-        // require(
-        //     hasRedeemed[msg.sender][NFTContract][_tokenId] == false,
-        //     "NFT has already been manifested."
-        // );
+        require(
+            hasRedeemed[msg.sender][NFTContract][_tokenId] == false,
+            "NFT has already been manifested."
+        );
         hasRedeemed[msg.sender][NFTContract][_tokenId] = true;
         uint256 lastManifestId = collection.getCounter();
         string memory slash = "/";

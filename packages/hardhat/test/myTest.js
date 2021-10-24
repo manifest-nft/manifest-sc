@@ -18,14 +18,5 @@ describe("My Dapp", function () {
 
       myContract = await YourContract.deploy();
     });
-
-    describe("setPurpose()", function () {
-      it("Should be able to set a new purpose", async function () {
-        const newPurpose = "Test Purpose";
-
-        await myContract.setPurpose(newPurpose);
-        expect(await myContract.purpose()).to.equal(newPurpose);
-      });
-    });
   });
 });
